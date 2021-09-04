@@ -8,6 +8,7 @@ django = "~=3.2.0"
 djangorestframework = "*"
 markdown = "*"
 environs = {version = "==8.0.0", extras = ["django"]}
+django-ckeditor = "*"
 
 [dev-packages]
 

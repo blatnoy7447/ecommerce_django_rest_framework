@@ -1,12 +1,16 @@
 from rest_framework import serializers
-from mainapp import models
+from mainapp.models import *
 
 
-class CategoriesSerializer(serializers.ModelSerializer):
+class ProductSerializers(serializers.ModelSerializer):
+    """Список продуктов"""
     class Meta:
-        fields = (
-            'id',
-            'title',
-            'description',
-        )
-        model = models.Categories
+        model = Products
+        fields = ("id", "product_name", "subcategories_id")
+
+
+class ProductDetailSerializers(serializers.ModelSerializer):
+    """Полный продукт"""
+    class Meta:
+        model = Products
+        exclude = ("added_by_merchant", )

@@ -1,13 +1,21 @@
-from rest_framework import generics
-from mainapp import models
-from .serializers import CategoriesSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from mainapp.models import Products
+from .serializers import ProductSerializers, ProductDetailSerializers
 
 
-class ListCategory(generics.ListCreateAPIView):
-    queryset = models.Categories.objects.all()
-    serializer_class = CategoriesSerializer
+class ProductListView(APIView):
+
+    def get(self, request):
+        products = Products.objects.all()
+        serializer = ProductSerializers(products, many=True)
+        return Response(serializer.data)
 
 
-class DetailCategory(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Categories.objects.all()
-    serializer_class = CategoriesSerializer
+class ProductDetailView(APIView):
+
+    def get(self, request, pk):
+        product = Products.objects.get(id=pk)
+        serializer = ProductDetailSerializers(product)
+        return Response(serializer.data)
