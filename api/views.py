@@ -1,21 +1,28 @@
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import generics
 
 from mainapp.models import Products
-from .serializers import ProductSerializers, ProductDetailSerializers
+from .serializers import (
+    ProductSerializers,
+    ProductDetailSerializer,
+    ProductReviewsCreateSerializer
+)
 
 
-class ProductListView(APIView):
+class ProductListView(generics.ListAPIView):
+    """Вывод списка продуктов"""
+    serializer_class = ProductSerializers
 
-    def get(self, request):
+    def get_queryset(self):
         products = Products.objects.all()
-        serializer = ProductSerializers(products, many=True)
-        return Response(serializer.data)
+        return products
 
 
-class ProductDetailView(APIView):
+class ProductDetailView(generics.RetrieveAPIView):
+    """Вывод продукта"""
+    queryset = Products.objects.all()
+    serializer_class = ProductDetailSerializer
 
-    def get(self, request, pk):
-        product = Products.objects.get(id=pk)
-        serializer = ProductDetailSerializers(product)
-        return Response(serializer.data)
+
+class ProductReviewsCreateView(generics.CreateAPIView):
+    """Добавление отзыва к продукту"""
+    serializer_class = ProductReviewsCreateSerializer
